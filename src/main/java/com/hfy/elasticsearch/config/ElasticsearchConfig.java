@@ -1,4 +1,4 @@
-package com.hfy.elasticsearch.configuration;
+package com.hfy.elasticsearch.config;
 
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
@@ -17,15 +17,15 @@ import java.net.UnknownHostException;
  * Created by HuangFangyuan on 2018/2/25.
  */
 @Configuration
-public class ElasticsearchConfiguration {
+public class ElasticsearchConfig {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger("LogService");
+    private static final Logger LOGGER = LoggerFactory.getLogger(ElasticsearchConfig.class);
 
-    @Value("${transport-client.cluster-name}")
+    @Value("${es.cluster-name}")
     String clusterName;
-    @Value("${transport-client.host}")
+    @Value("${es.host}")
     String host;
-    @Value("${transport-client.port}")
+    @Value("${es.port}")
     int port;
 
     @Bean

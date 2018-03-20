@@ -1,12 +1,13 @@
-package com.hfy.elasticsearch.service;
+package com.hfy.elasticsearch.service.impl;
 
 import com.google.gson.Gson;
 import com.hfy.elasticsearch.dto.AlarmDto;
 import com.hfy.elasticsearch.dto.ResultDto;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
-import com.hfy.elasticsearch.model.Hit;
-import com.hfy.elasticsearch.model.Source;
+import com.hfy.elasticsearch.entity.Hit;
+import com.hfy.elasticsearch.entity.Source;
+import com.hfy.elasticsearch.service.interfaces.LogService;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.search.SearchHit;
@@ -15,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.*;
 
 
@@ -23,18 +23,32 @@ import java.util.*;
  * Created by HuangFangyuan on 2018/2/25.
  */
 @Service
-public class LogService {
+public class LogServiceImpl implements LogService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LogService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogServiceImpl.class);
 
     private TransportClient client;
 
     @Autowired
-    public LogService(TransportClient client) {
+    public LogServiceImpl(TransportClient client) {
         this.client = client;
     }
 
-    public ResultDto getLogs(String index, int from, int size) throws IOException {
+    @Override
+    public List<Hit> search(String index, String field, String value, long sTime, long eTime) {
+        SearchResponse response = client.prepareSearch(index).setTypes("doc")
+                .setQuery(boolQuery()
+                        .must(matchQuery(field, value))
+                        .must(rangeQuery("@timestamp").from(sTime).to(eTime)
+                        )
+                )
+                .get();
+        List<Hit> result = parseHits(response.getHits().getHits());
+        return result;
+    }
+
+    @Override
+    public ResultDto getLogs(String index, int from, int size) {
         SearchResponse response = client.prepareSearch(index)
                 .setFrom(from)
                 .setSize(size)
@@ -46,7 +60,8 @@ public class LogService {
         return resultDto;
     }
 
-    public ResultDto getLogsByTime(String index, int from, int size, Date sTime, Date eTime) throws IOException {
+    @Override
+    public ResultDto getLogsByTime(String index, int from, int size, Date sTime, Date eTime) {
         SearchResponse response = client.prepareSearch(index)
                 .setFrom(from)
                 .setSize(size)
@@ -59,6 +74,7 @@ public class LogService {
         return resultDto;
     }
 
+    @Override
     public AlarmDto getErrorOrBug(String index) {
         SearchResponse response = client.prepareSearch(index)
                 .setQuery(matchQuery("level","ERROR"))
@@ -72,7 +88,7 @@ public class LogService {
         return alarmDto;
     }
 
-    private List<Hit> parseHits(SearchHit[] hits) {
+    public List<Hit> parseHits(SearchHit[] hits) {
         if (null == hits) {
             throw new NullPointerException();
         }
@@ -93,5 +109,4 @@ public class LogService {
         }
         return result;
     }
-
 }

@@ -1,4 +1,4 @@
-package com.hfy.elasticsearch.Utils;
+package com.hfy.elasticsearch.utils;
 
 /**
  * Created by HuangFangyuan on 2018/2/25.

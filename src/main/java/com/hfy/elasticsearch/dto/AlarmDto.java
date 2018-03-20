@@ -1,6 +1,6 @@
 package com.hfy.elasticsearch.dto;
 
-import com.hfy.elasticsearch.model.Hit;
+import com.hfy.elasticsearch.entity.Hit;
 import lombok.Data;
 
 import java.util.List;

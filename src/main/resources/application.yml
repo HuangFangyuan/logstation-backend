@@ -1,22 +1,37 @@
 spring:
-#  datasource:
-#    driver-class-name: com.mysql.jdbc.Driver
-#    url: jdbc:mysql://127.0.0.1:3306/logstation
-#    username: root
-#    password: admin
-#  data:
-#    elasticsearch:
-#      cluster-nodes: localhost:9200
-#      cluster-name: my-application
-#      repositories:
-#        enabled: true
-
+  mail:
+    host: smtp.163.com
+    username: hfy_1996@163.com
+    password: 996523
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/logstation
+    username: root
+    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: update # Data Definition Language 自动创建|更新|验证数据库表结构
+    show-sql: true
+  redis:
+    host: localhost
+    port: 6379
 
 server:
   port: 8088
   context-path: /
 
-transport-client:
+
+es:
   cluster-name: my-application
   host: localhost
   port: 9300
+
+#mybatis:
+#  mapper-locations: classpath:mapper/*.xml

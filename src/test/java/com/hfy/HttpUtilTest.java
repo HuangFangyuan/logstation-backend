@@ -1,6 +1,6 @@
 package com.hfy;
 
-import com.hfy.elasticsearch.Utils.HttpUtil;
+import com.hfy.elasticsearch.utils.HttpUtil;
 import org.junit.Test;
 
 /**

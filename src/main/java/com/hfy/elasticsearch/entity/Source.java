@@ -1,4 +1,4 @@
-package com.hfy.elasticsearch.model;
+package com.hfy.elasticsearch.entity;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;

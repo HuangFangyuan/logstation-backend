@@ -1,11 +1,9 @@
-package com.hfy.elasticsearch.api;
+package com.hfy.elasticsearch.controller;
 
-import com.hfy.elasticsearch.configuration.Cors;
-import com.hfy.elasticsearch.service.LogService;
+import com.hfy.elasticsearch.service.interfaces.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +29,7 @@ public class LogController {
     public ResponseEntity get(@RequestParam("index") String index,
                               @RequestParam("from") int from,
                               @RequestParam("size") int size) throws IOException {
-        return new ResponseEntity(logService.getLogs(index, from, size), HttpStatus.OK);
+        return new ResponseEntity<>(logService.getLogs(index, from, size), HttpStatus.OK);
 
     }
 }
