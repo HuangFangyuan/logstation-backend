@@ -1,7 +1,7 @@
 package com.hfy;
 
-import com.hfy.elasticsearch.entity.Monitor;
-import com.hfy.elasticsearch.service.interfaces.*;
+import com.hfy.logstation.entity.Monitor;
+import com.hfy.logstation.service.interfaces.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.quartz.SchedulerException;
@@ -48,7 +48,7 @@ public class LogstationApplicationTests {
 
 	@Test
 	public void test5() throws IOException {
-		System.out.println(logService.getLogs("applog", 0 , 5));
+		System.out.println(logService.get("applog", 0 , 5));
 	}
 
 	@Test
