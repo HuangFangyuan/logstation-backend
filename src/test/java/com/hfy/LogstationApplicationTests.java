@@ -48,7 +48,6 @@ public class LogstationApplicationTests {
 
 	@Test
 	public void test5() throws IOException {
-		System.out.println(logService.get("applog", 0 , 5));
 	}
 
 	@Test

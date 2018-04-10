@@ -20,10 +20,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-
-/**
- * Created by HuangFangyuan on 2018/3/16.
- */
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 
@@ -44,7 +40,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public void executeMonitor(Monitor monitor) throws SchedulerException {
-        int interval = 5;
+        // 10秒扫描一次
+        int interval = 10;
         JobDetail job = newJob()
                 .ofType(MonitorJob.class)
                 .usingJobData("interval", interval)

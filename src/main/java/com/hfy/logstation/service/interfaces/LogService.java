@@ -1,21 +1,32 @@
 package com.hfy.logstation.service.interfaces;
 
 import com.hfy.logstation.dto.ResultDto;
-import com.hfy.logstation.entity.Hit;
 import org.elasticsearch.search.sort.SortOrder;
 
-import java.util.List;
 
 public interface LogService {
-    ResultDto get(String index, int from, int size);
 
-    ResultDto get(String index, String field, String value, int from, int size);
+    ResultDto getAll(String index, int from, int size);
 
-    List<Hit> get(String index, String field, String value, Object start, Object to);
+    ResultDto getAll(String index, int from, int size, String sortField, SortOrder order);
 
-    ResultDto get(String index, int from, int size, String sortField, SortOrder order);
+    ResultDto match(String index, String matchField, Object value, int from, int size);
 
-    ResultDto get(String index, String field, String value, int from, int size, String sortField, SortOrder order);
+    ResultDto match(String index, String matchField, Object value, int from, int size, String sortField, SortOrder order);
 
-    List<Hit> get(String index, String field, String value, String rangeField, Object start, Object end);
+    ResultDto notMatch(String index, String field, Object value, int from, int size);
+
+    ResultDto notMatch(String index, String field, Object value, int from, int size, String sortField, SortOrder order);
+
+    ResultDto getByCondition(String index, String field, Object fromValue, Object toValue, String operator, int from, int size);
+
+    ResultDto range(String index, String rangField, int from, int size, Object start, Object end);
+
+    ResultDto range(String index, String rangField, int from, int size, Object start, Object end, String sortField, SortOrder order);
+
+    ResultDto matchAndRange(String index, String matchField, Object value, String rangeField, Object start, Object end);
+
+    ResultDto matchAndRangeAndCount(String index, String matchField, Object value, String rangeField, Object start, Object end,String countField);
+
+    ResultDto matchAndRangeAndAvg(String index, String matchField, Object value, String rangeField, Object start, Object end,String avgField);
 }

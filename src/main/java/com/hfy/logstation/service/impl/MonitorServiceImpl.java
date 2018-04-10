@@ -10,9 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Created by HuangFangyuan on 2018/3/12.
- */
 @Service
 public class MonitorServiceImpl implements MonitorService {
 
@@ -30,8 +27,7 @@ public class MonitorServiceImpl implements MonitorService {
 
     @Override
     public List<Monitor> getMonitors() {
-        List<Monitor> monitorList = getActiveMonitor();
-        return monitorList;
+        return getActiveMonitor();
     }
 
     @Override
@@ -49,9 +45,9 @@ public class MonitorServiceImpl implements MonitorService {
         monitorRepository.save(monitor);
     }
 
+    //不从数据库中删除，而是将监视器置为非激活
     @Override
     public void deleteMonitor(Integer id) throws SchedulerException {
-//        monitorRepository.delete(id);
         Monitor m = getMonitor(id);
         m.setActive(false);
         updateMonitor(m);

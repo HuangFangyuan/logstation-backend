@@ -33,5 +33,7 @@ es:
   host: localhost
   port: 9300
 
+
+serverSecret: Hjs#n)nQ%3d*5(mm@ef&ds
 #mybatis:
 #  mapper-locations: classpath:mapper/*.xml

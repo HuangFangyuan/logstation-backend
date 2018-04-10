@@ -6,52 +6,37 @@ import lombok.Data;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by HuangFangyuan on 2018/2/23.
- */
 @Data
 public class Source {
 
-    int offset;
-
-    Prospector prospector;
-
+    //用到的部分
     String source;
 
-    Beat beat;
+    int costTime;
+
+    String module;
+
+    String task;
 
     String message;
 
+    String system;
+
     String host;
 
-    @SerializedName("@version")
-    String version;
+    String result;
 
-    List<String> tags;
+    String information;
 
     @SerializedName("@timestamp")
     Date timestamp;
 
-    @SerializedName("timestamp")
-    Date time;
+    @SerializedName("eventTime")
+    Date eventTime;
 
     String level;
 
-    String text;
-
     @SerializedName("class")
     String className;
-
-    @Data
-    public class Prospector {
-        String type;
-    }
-
-    @Data
-    public class Beat {
-        String hostname;
-        String version;
-        String name;
-    }
 
 }

@@ -5,9 +5,6 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.Date;
 
-/**
- * Created by HuangFangyuan on 2018/3/12.
- */
 @Entity
 @Data
 @Table(name= "t_monitor")
@@ -34,6 +31,9 @@ public class Monitor {
 
     @Column(name = "m_interval")
     private Integer interval;
+
+    @Column(name = "m_interval")
+    private Integer frequency;
 
     @Column(nullable = false)
     private boolean active;

@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
-/**
- * Created by HuangFangyuan on 2018/3/11.
- */
 @RestController
 @RequestMapping("/monitor")
 public class MonitorController {
@@ -30,7 +27,8 @@ public class MonitorController {
                                      @RequestParam("method") String method,  //通知方式
                                      @RequestParam("contact") String contact,
                                      @RequestParam("subject") String subject,
-                                     @RequestParam("content")String content) throws SchedulerException {
+                                     @RequestParam("content")String content,
+                                     @RequestParam("frequency")Integer frequency) throws SchedulerException {
 
         Monitor monitor = new Monitor();
         monitor.setName(name);
@@ -45,6 +43,7 @@ public class MonitorController {
         monitor.setContent(content);
         monitor.setActive(true);
         monitor.setCreateTime(new Date());
+        monitor.setFrequency(frequency);
 
         monitorService.addMonitor(monitor);
         return new ResponseEntity<>("success", HttpStatus.OK);

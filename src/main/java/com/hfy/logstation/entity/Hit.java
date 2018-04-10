@@ -3,9 +3,6 @@ package com.hfy.logstation.entity;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
-/**
- * Created by HuangFangyuan on 2018/2/25.
- */
 @Data
 public class Hit {
 

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/logs")
 public class LogController {
 
     private LogService logService;
@@ -29,7 +28,7 @@ public class LogController {
      * @param size
      * @return Response
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/logs", method = RequestMethod.GET)
     public Response<Object> get(@RequestParam("index") String index,
                               @RequestParam("from") int from,
                               @RequestParam("size") int size) throws IOException {
@@ -40,14 +39,16 @@ public class LogController {
             throw new ServerException(ResponseEnum.ILLEGAL_PARAMS);
         }
 
-        return ResponseUtil.success(logService.get(index, from, size));
+        return ResponseUtil.success(logService.getAll(index, from, size));
 
     }
 
-    @RequestMapping(value = "/condition", method = RequestMethod.GET)
+    @RequestMapping(value = "/logs/condition", method = RequestMethod.GET)
     public Response<Object> get(@RequestParam("index") String index,
                               @RequestParam("field") String field,
-                              @RequestParam("value") String value,
+                              @RequestParam("fromValue") Object fromValue,
+                              @RequestParam("toValue") Object toValue,
+                              @RequestParam("operator") String operator,
                               @RequestParam("from") int from,
                               @RequestParam("size") int size) throws IOException {
         if (from < 0) {
@@ -56,7 +57,8 @@ public class LogController {
         if (size <= 0) {
             throw new ServerException(ResponseEnum.ILLEGAL_PARAMS);
         }
-        return ResponseUtil.success(logService.get(index, field, value, from, size));
+
+        return ResponseUtil.success(logService.getByCondition(index, field, fromValue, toValue, operator, from, size));
 
     }
 }
