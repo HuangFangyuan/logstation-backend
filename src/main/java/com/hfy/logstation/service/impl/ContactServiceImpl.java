@@ -1,19 +1,21 @@
 package com.hfy.logstation.service.impl;
 
 import com.hfy.logstation.entity.Contact;
+import com.hfy.logstation.exception.ServerException;
 import com.hfy.logstation.repository.ContactRepository;
 import com.hfy.logstation.service.interfaces.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-/**
- * Created by HuangFangyuan on 2018/3/12.
- */
 @Service
 public class ContactServiceImpl implements ContactService {
 
+    @NotNull
     private ContactRepository contactRepository;
 
     @Autowired
@@ -21,37 +23,54 @@ public class ContactServiceImpl implements ContactService {
         this.contactRepository = contactRepository;
     }
 
-
     @Override
-    public int addContact(Contact contact) {
+    public Contact addContact(@NotNull Contact contact) {
         if (contact.getDefaultUse()) {
-            Contact pre = getDefaultContact();
-            if (pre != null) {
-                pre.setDefaultUse(false);
-                contactRepository.save(pre);
-            }
-
+            Optional.ofNullable(getDefaultContact())
+                    .ifPresent(pre -> {
+                        pre.setDefaultUse(false);
+                        updateContact(pre);
+                    });
         }
-        return contactRepository.save(contact).getId();
+        return contactRepository.save(contact);
     }
 
     @Override
     public List<Contact> getContacts() {
-        return contactRepository.findAll();
+        return Optional.ofNullable(contactRepository.findAll())
+                .orElse(Collections.emptyList());
     }
 
     @Override
     public Contact getContact(int id) {
-        return contactRepository.getOne(id);
+        return Optional.ofNullable(contactRepository.findOne(id))
+                .orElseThrow(() -> new ServerException("not exist this id:" + id));
     }
 
     @Override
     public Contact getDefaultContact() {
-        return contactRepository.getByDefaultUse(true);
+        return Optional.ofNullable(contactRepository.getByDefaultUse(true))
+                .orElseThrow(() -> new ServerException("not exist default contact"));
+    }
+
+    @Override
+    public Contact updateContact(Contact contact) {
+        return contactRepository.save(contact);
     }
 
     @Override
     public void deleteContact(int id) {
-        contactRepository.delete(id);
+        Optional.ofNullable(getContact(id))
+                .ifPresent(c -> {
+                    contactRepository.delete(c);
+                    if (c.getDefaultUse()) {
+                        getContacts().stream()
+                                .findAny()
+                                .ifPresent(any -> {
+                                    any.setDefaultUse(true);
+                                    updateContact(any);
+                                });
+                    }
+                });
     }
 }

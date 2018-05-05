@@ -5,9 +5,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * Created by HuangFangyuan on 2018/3/19.
- */
 @Configuration
 public class ApplicationContextReference implements ApplicationContextAware {
 

@@ -4,6 +4,7 @@ import com.hfy.logstation.entity.Response;
 import com.hfy.logstation.exception.ResponseEnum;
 import com.hfy.logstation.exception.ServerException;
 import com.hfy.logstation.util.ResponseUtil;
+import org.elasticsearch.index.IndexNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -25,6 +26,10 @@ public class ExceptionHandle {
          else if (e instanceof MissingServletRequestParameterException) {
              LOGGER.error("miss params exception {}", e);
              return ResponseUtil.error(ResponseEnum.NULL_PARAMS);
+         }
+         else if(e instanceof IndexNotFoundException) {
+             LOGGER.error("no such index");
+             return ResponseUtil.error(ResponseEnum.NO_SUCH_INDEX);
          }
          else {
              LOGGER.error("unknown exception {}", e);

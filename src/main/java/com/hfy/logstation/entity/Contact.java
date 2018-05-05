@@ -4,9 +4,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-/**
- * Created by HuangFangyuan on 2018/3/13.
- */
 @Entity
 @Data
 @Table(name = "t_contact")

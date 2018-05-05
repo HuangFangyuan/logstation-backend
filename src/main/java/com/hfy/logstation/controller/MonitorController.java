@@ -1,7 +1,9 @@
 package com.hfy.logstation.controller;
 
 import com.hfy.logstation.entity.Monitor;
+import com.hfy.logstation.entity.Response;
 import com.hfy.logstation.service.interfaces.MonitorService;
+import com.hfy.logstation.util.ResponseUtil;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,18 +19,19 @@ public class MonitorController {
     @Autowired
     private MonitorService monitorService;
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addMonitor(@RequestParam("name") String name,
-                                     @RequestParam("index") String index,
-                                     @RequestParam("type") String type,
-                                     @RequestParam("field") String field,
-                                     @RequestParam("value") String value,
-                                     @RequestParam("interval") Integer interval,
-                                     @RequestParam("method") String method,  //通知方式
-                                     @RequestParam("contact") String contact,
-                                     @RequestParam("subject") String subject,
-                                     @RequestParam("content")String content,
-                                     @RequestParam("frequency")Integer frequency) throws SchedulerException {
+    @PostMapping()
+    public Response addMonitor(@RequestParam("name") String name,
+                               @RequestParam("index") String index,
+                               @RequestParam("type") String type,
+                               @RequestParam("field") String field,
+                               @RequestParam("value") String value,
+                               @RequestParam("interval") Integer interval,
+                               @RequestParam("method") String method,  //通知方式
+                               @RequestParam("contact") String contact,
+                               @RequestParam("subject") String subject,
+                               @RequestParam("content")String content,
+                               @RequestParam("frequency")Integer frequency,
+                               @RequestParam("avgField")String avgField) throws SchedulerException {
 
         Monitor monitor = new Monitor();
         monitor.setName(name);
@@ -44,33 +47,36 @@ public class MonitorController {
         monitor.setActive(true);
         monitor.setCreateTime(new Date());
         monitor.setFrequency(frequency);
+        monitor.setAvgField(avgField);
 
         monitorService.addMonitor(monitor);
-        return new ResponseEntity<>("success", HttpStatus.OK);
+        return ResponseUtil.success();
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity getMonitors() {
-        return new ResponseEntity<>(monitorService.getActiveMonitor(), HttpStatus.OK);
+    @GetMapping()
+    public Response getMonitors(@RequestParam("onlyActive")boolean onlyActive) {
+        return ResponseUtil.success(monitorService.getMonitors(onlyActive));
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity getMonitor(@PathVariable("id") int id) {
-        return new ResponseEntity<>(monitorService.getMonitor(id), HttpStatus.OK);
+    @GetMapping("/{id}")
+    public Response getMonitor(@PathVariable("id") int id) {
+        return ResponseUtil.success(monitorService.getMonitor(id));
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
-    public ResponseEntity modifyMonitor(@RequestParam("id") int id,
-                                        @RequestParam("name") String name,
-                                        @RequestParam("index") String index,
-                                        @RequestParam("type") String type,
-                                        @RequestParam("field") String field,
-                                        @RequestParam("value") String value,
-                                        @RequestParam("interval") Integer interval,
-                                        @RequestParam("method") String method,  //通知方式
-                                        @RequestParam("contact") String contact,
-                                        @RequestParam("subject") String subject,
-                                        @RequestParam("content")String content) {
+    @PutMapping()
+    public Response modifyMonitor(@RequestParam("id") int id,
+                                  @RequestParam("name") String name,
+                                  @RequestParam("index") String index,
+                                  @RequestParam("type") String type,
+                                  @RequestParam("field") String field,
+                                  @RequestParam("value") String value,
+                                  @RequestParam("interval") Integer interval,
+                                  @RequestParam("method") String method,  //通知方式
+                                  @RequestParam("contact") String contact,
+                                  @RequestParam("subject") String subject,
+                                  @RequestParam("content")String content,
+                                  @RequestParam("frequency")Integer frequency,
+                                  @RequestParam("avgField")String avgField) {
 
         Monitor monitor = new Monitor();
         monitor.setId(id);
@@ -86,14 +92,16 @@ public class MonitorController {
         monitor.setContent(content);
         monitor.setActive(true);
         monitor.setCreateTime(new Date());
-
+        monitor.setFrequency(frequency);
+        monitor.setAvgField(avgField);
         monitorService.updateMonitor(monitor);
-        return new ResponseEntity<>("success", HttpStatus.OK);
+
+        return ResponseUtil.success();
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity deleteMonitor(@PathVariable("id") Integer id) throws SchedulerException {
+    @DeleteMapping("/{id}")
+    public Response deleteMonitor(@PathVariable("id") Integer id) throws SchedulerException {
         monitorService.deleteMonitor(id);
-        return new ResponseEntity<>("success", HttpStatus.OK);
+        return ResponseUtil.success();
     }
 }

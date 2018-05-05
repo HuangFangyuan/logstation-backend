@@ -52,7 +52,6 @@ public class LogstationApplicationTests {
 
 	@Test
 	public void test2()  {
-		System.out.println(monitorService.getMonitors());
 	}
 
 	@Test

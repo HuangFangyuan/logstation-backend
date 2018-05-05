@@ -14,7 +14,7 @@ public class Monitor {
     @GeneratedValue
     private int id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(name = "m_index", nullable = false)
@@ -30,10 +30,11 @@ public class Monitor {
     private String value;
 
     @Column(name = "m_interval")
-    private Integer interval;
+    private Integer interval = 10;
 
-    @Column(name = "m_interval")
     private Integer frequency;
+
+    private String avgField;
 
     @Column(nullable = false)
     private boolean active;

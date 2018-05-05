@@ -1,8 +1,8 @@
 package com.hfy.logstation.service.interfaces;
 
-/**
- * Created by HuangFangyuan on 2018/3/16.
- */
+import com.hfy.logstation.entity.Monitor;
+
 public interface MailService {
+    void sendEmail(Monitor m, Object message);
     void sendSimpleEmail(String from, String to, String subject, String content);
 }

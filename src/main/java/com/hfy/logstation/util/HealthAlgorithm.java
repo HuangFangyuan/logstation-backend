@@ -1,9 +1,6 @@
 package com.hfy.logstation.util;
 
-/**
- * Created by HuangFangyuan on 2018/3/13.
- */
+@FunctionalInterface
 public interface HealthAlgorithm {
-
-    int score(long info, long debug, long warn, long error);
+    int score(long info, long warn, long error);
 }

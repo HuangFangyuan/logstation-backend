@@ -1,32 +1,38 @@
 package com.hfy.logstation.service.interfaces;
 
-import com.hfy.logstation.dto.ResultDto;
+import com.hfy.logstation.dto.LogDto;
+import com.hfy.logstation.entity.QueryBean;
 import org.elasticsearch.search.sort.SortOrder;
+
+import java.util.List;
 
 
 public interface LogService {
 
-    ResultDto getAll(String index, int from, int size);
+    //日志模块接口
 
-    ResultDto getAll(String index, int from, int size, String sortField, SortOrder order);
+    LogDto getAll(String index, int from, int size);
 
-    ResultDto match(String index, String matchField, Object value, int from, int size);
+    LogDto getAll(String index, int from, int size, String sortField, SortOrder order);
 
-    ResultDto match(String index, String matchField, Object value, int from, int size, String sortField, SortOrder order);
+    LogDto getByCondition(String index, List<QueryBean> queryList, int from, int size);
 
-    ResultDto notMatch(String index, String field, Object value, int from, int size);
+    LogDto range(String index, String rangField, int from, int size, Object start, Object end);
 
-    ResultDto notMatch(String index, String field, Object value, int from, int size, String sortField, SortOrder order);
+    LogDto range(String index, String rangField, int from, int size, Object start, Object end, String sortField, SortOrder order);
 
-    ResultDto getByCondition(String index, String field, Object fromValue, Object toValue, String operator, int from, int size);
+    LogDto matchAndRange(String index, String matchField, Object value, String rangeField, Object start, Object end);
 
-    ResultDto range(String index, String rangField, int from, int size, Object start, Object end);
+    long matchAndRangeAndCount(String index, String matchField, Object value, String rangeField, Object start, Object end,String countField);
 
-    ResultDto range(String index, String rangField, int from, int size, Object start, Object end, String sortField, SortOrder order);
+    Double matchAndRangeAndAvg(String index, String matchField, Object value, String rangeField, Object start, Object end,String avgField);
 
-    ResultDto matchAndRange(String index, String matchField, Object value, String rangeField, Object start, Object end);
+    //暂时没用到
+    LogDto match(String index, String matchField, Object value, int from, int size);
 
-    ResultDto matchAndRangeAndCount(String index, String matchField, Object value, String rangeField, Object start, Object end,String countField);
+    LogDto match(String index, String matchField, Object value, int from, int size, String sortField, SortOrder order);
 
-    ResultDto matchAndRangeAndAvg(String index, String matchField, Object value, String rangeField, Object start, Object end,String avgField);
+    LogDto notMatch(String index, String field, Object value, int from, int size);
+
+    LogDto notMatch(String index, String field, Object value, int from, int size, String sortField, SortOrder order);
 }

@@ -6,4 +6,5 @@ public interface UserService {
 
     User signUp(User user);
     String signIn(User user);
+    User getUser(int id);
 }

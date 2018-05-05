@@ -1,14 +1,13 @@
 package com.hfy.logstation.service.impl;
 
+import com.hfy.logstation.entity.Monitor;
 import com.hfy.logstation.service.interfaces.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by HuangFangyuan on 2018/3/16.
- */
+
 @Service
 public class MailServiceImpl implements MailService {
 
@@ -17,6 +16,15 @@ public class MailServiceImpl implements MailService {
     @Autowired
     public MailServiceImpl(JavaMailSender mailSender) {
         this.mailSender = mailSender;
+    }
+
+    @Override
+    public void sendEmail(Monitor m, Object message) {
+        sendSimpleEmail(
+                "hfy_1996@163.com",
+                m.getContact(),
+                m.getSubject(),
+                m.getContent() + message);
     }
 
     @Override

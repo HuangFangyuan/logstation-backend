@@ -18,8 +18,6 @@ public class Source {
 
     String task;
 
-    String message;
-
     String system;
 
     String host;
@@ -38,5 +36,7 @@ public class Source {
 
     @SerializedName("class")
     String className;
+
+    String error;
 
 }

@@ -18,7 +18,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update # Data Definition Language 自动创建|更新|验证数据库表结构
-    show-sql: true
+    show-sql: false
   redis:
     host: localhost
     port: 6379

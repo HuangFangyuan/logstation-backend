@@ -1,8 +1,5 @@
 package com.hfy.logstation.util;
 
-/**
- * Created by HuangFangyuan on 2018/3/21.
- */
 public class PerformanceMonitor {
     private static ThreadLocal<MethodPerformance> performanceRecord = new ThreadLocal<>();
 

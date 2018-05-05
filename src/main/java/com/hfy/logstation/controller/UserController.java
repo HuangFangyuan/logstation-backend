@@ -3,12 +3,10 @@ package com.hfy.logstation.controller;
 import com.hfy.logstation.entity.Response;
 import com.hfy.logstation.entity.User;
 import com.hfy.logstation.service.interfaces.UserService;
-import com.hfy.logstation.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import static com.hfy.logstation.util.ResponseUtil.success;
 
 @RestController
 @RequestMapping("/user")
@@ -21,7 +19,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    @PostMapping("/signup")
     public Response signUp(@RequestParam("account") String account,
                            @RequestParam("pass") String pass,
                            @RequestParam("name") String name) {
@@ -30,15 +28,15 @@ public class UserController {
         user.setPassword(pass);
         user.setName(name);
         userService.signUp(user);
-        return ResponseUtil.success();
+        return success();
     }
 
-    @RequestMapping(value = "/signin", method = RequestMethod.POST)
+    @PostMapping("/signin")
     public Response signIn(@RequestParam("account") String account,
                            @RequestParam("pass") String pass) {
         User user = new User();
         user.setAccount(account);
         user.setPassword(pass);
-        return ResponseUtil.success(userService.signIn(user));
+        return success(userService.signIn(user));
     }
 }

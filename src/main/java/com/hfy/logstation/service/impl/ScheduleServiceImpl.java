@@ -1,59 +1,55 @@
 package com.hfy.logstation.service.impl;
 
-//job相关的builder
-import static org.quartz.JobBuilder.*;
-
-//trigger相关的builder
 import static org.quartz.TriggerBuilder.*;
 import static org.quartz.SimpleScheduleBuilder.*;
 
-//日期相关的builder
-
 import com.hfy.logstation.entity.Monitor;
-import com.hfy.logstation.job.MonitorJob;
+import com.hfy.logstation.job.*;
 import com.hfy.logstation.service.interfaces.*;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
+import javax.annotation.PostConstruct;
+import java.util.*;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 
-    @Autowired
-    private Scheduler scheduler;
-    @Autowired
-    private MonitorService monitorService;
-
     private static final HashMap<Integer, JobKey> ID2JOB = new HashMap<>();
 
-    @Override
-    public void executeMonitors() throws SchedulerException, IOException {
-        List<Monitor> monitorList = monitorService.getActiveMonitor();
-        for (Monitor m : monitorList) {
-            executeMonitor(m);
+    private Scheduler scheduler;
+    private MonitorService monitorService;
+
+    @PostConstruct
+    public void init() throws InterruptedException {
+        while (monitorService == null) {
+            Thread.sleep(1000);
         }
+        executeMonitors();
     }
 
     @Override
-    public void executeMonitor(Monitor monitor) throws SchedulerException {
-        // 10秒扫描一次
-        int interval = 10;
-        JobDetail job = newJob()
-                .ofType(MonitorJob.class)
-                .usingJobData("interval", interval)
-                .build();
+    public void executeMonitors() {
+        Optional.ofNullable(monitorService.getActiveMonitors())
+                .ifPresent(l -> l.forEach(this::executeMonitor));
+    }
+
+    @Override
+    public void executeMonitor(Monitor monitor) {
+        JobDetail job = JobFactory.createJobDetail(monitor.getType());
         job.getJobDataMap().put("monitor", monitor);
         Trigger trigger = newTrigger()
                 .startNow()
                 .withSchedule(simpleSchedule()
-                        .withIntervalInSeconds(interval)
+                        .withIntervalInSeconds(monitor.getInterval())
                         .repeatForever())
                 .build();
-        scheduler.scheduleJob(job, trigger);
+        try {
+            scheduler.scheduleJob(job, trigger);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
         ID2JOB.put(monitor.getId(), job.getKey());
     }
 
@@ -62,4 +58,18 @@ public class ScheduleServiceImpl implements ScheduleService {
         scheduler.deleteJob(ID2JOB.get(id));
     }
 
+    @Override
+    public void shutDown() throws SchedulerException {
+        scheduler.deleteJobs(new ArrayList<>(ID2JOB.values()));
+    }
+
+    @Autowired
+    public void setScheduler(Scheduler scheduler) {
+        this.scheduler = scheduler;
+    }
+
+    @Autowired
+    public void setMonitorService(MonitorService monitorService) {
+        this.monitorService = monitorService;
+    }
 }

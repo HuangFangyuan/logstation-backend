@@ -10,6 +10,7 @@ public enum ResponseEnum {
     WRONG_PASS(4, "password is wrong"),
     EXPIRE_TOKEN(5, "token is expire"),
     INVALID_TOKEN(6, "token is invalid"),
+    NO_SUCH_INDEX(7, "no such index"),
     success(200,"success"),
     ;
     int code;

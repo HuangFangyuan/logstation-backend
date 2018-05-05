@@ -9,6 +9,9 @@ import com.hfy.logstation.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -28,11 +31,19 @@ public class UserServiceImpl implements UserService {
         返回token
      */
     @Override
-    public String signIn(User user) {
-        User target = userRepository.findOne(user.getId());
-        if ( !target.getPassword().equals(user.getPassword())) {
-            throw new ServerException(ResponseEnum.WRONG_PASS);
-        }
+    public String signIn(@NotNull User user) {
+        Optional.ofNullable(getUser(user.getId()))
+                .ifPresent(u -> {
+                    if (!u.getPassword().equals(user.getPassword())) {
+                        throw new ServerException(ResponseEnum.WRONG_PASS);
+                    }
+                });
         return JwtUtil.generateToken(user.getId());
+    }
+
+    @Override
+    public User getUser(int id) {
+        return Optional.ofNullable(userRepository.findOne(id))
+                .orElseThrow(() -> new ServerException("not exist this id:" + id));
     }
 }

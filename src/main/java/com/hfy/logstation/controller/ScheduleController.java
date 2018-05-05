@@ -21,12 +21,12 @@ public class ScheduleController {
         this.scheduleService = scheduleService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping()
     public void schedule() throws IOException, SchedulerException {
         scheduleService.executeMonitors();
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping("/{id}")
     public void removeSchedule(@PathVariable("id") int id) throws IOException, SchedulerException {
         scheduleService.removeMonitor(id);
     }

@@ -3,17 +3,14 @@ package com.hfy.logstation.util;
 import com.hfy.logstation.entity.Response;
 import com.hfy.logstation.exception.ResponseEnum;
 
-/**
- * Created by HuangFangyuan on 2018/4/1.
- */
 public class ResponseUtil {
 
-    public static Response<Object> success(Object object) {
-        return new Response<>(ResponseEnum.success, object);
+    public static <T> Response<T> success(T t) {
+        return new Response<>(t);
     }
 
-    public static Response<Object> success() {
-        return new Response<>(ResponseEnum.success, null);
+    public static <T> Response<T> success() {
+        return new Response<>(null);
     }
 
     public static Response error(int code, String msg) {

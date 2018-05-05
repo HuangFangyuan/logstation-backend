@@ -10,9 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-/**
- * Created by HuangFangyuan on 2018/3/21.
- */
 @Aspect
 @Component
 public class MethodPerformanceAspect {
@@ -24,7 +21,7 @@ public class MethodPerformanceAspect {
 
     @Before("methodPerformancePoint()")
     public void timerStart(JoinPoint joinPoint) {
-        PerformanceMonitor.begin(joinPoint.getSignature().toShortString());
+        PerformanceMonitor.begin(joinPoint.getSignature().toString());
     }
 
     @After("methodPerformancePoint()")

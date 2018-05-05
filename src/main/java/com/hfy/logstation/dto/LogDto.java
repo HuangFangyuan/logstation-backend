@@ -5,16 +5,10 @@ import lombok.Data;
 
 import java.util.List;
 
-/**
- * Created by HuangFangyuan on 2018/2/28.
- */
+
 @Data
-public class ResultDto {
+public class LogDto {
     long total;
     List<Hit> hits;
-
-    public void addHit(Hit hit) {
-        hits.add(hit);
-    }
-
+    long today;
 }
